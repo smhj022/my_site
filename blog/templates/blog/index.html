@@ -1,9 +1,35 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-    My blog
-{% endblock%}
+My blog
+{% endblock %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'blog/index.css'%}" />
+<link rel="stylesheet"  href="{% static 'blog/post.css'%}"/>
+{% endblock %}
 
 {% block content %}
-   <h1> Welcome to my blog </h1>
+
+<section id="welcome">s
+    <header>
+        <img src="{% static 'blog/images/max.png'%}" , alt="Suyash-The Author Of This Blog">
+        <h2>SUYASH'S BLOG</h2>
+    </header>
+    <p> Hi, I am Suyash and I love to blog about Technology Machines and the world!! </p>
+</section>
+
+<section id="latest-posts">
+    <h2>My Latest Post</h2>
+    <ul>
+        {% include "blog/include/post.html"%}
+    </ul>
+</section>
+
+<section id="about">
+    <h2>What I Do</h2>
+</section>
+<p>I am pursuing my masters from IIT delhi</p>
+<p> I love programming, I love to help others and I enjoy exploring new technologies in general! </p>
 {% endblock%}
