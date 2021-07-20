@@ -23,7 +23,10 @@ My blog
 <section id="latest-posts">
     <h2>My Latest Post</h2>
     <ul>
-        {% include "blog/include/post.html"%}
+        {% for post in posts%}
+        <!-- post in available in include no need to mention due to hierarchy -->
+            {% include "blog/include/post.html" %}  
+        {% endfor %}
     </ul>
 </section>
 
