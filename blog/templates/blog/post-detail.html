@@ -15,9 +15,14 @@ The post Title
     <h2>
         {{ view_post.title }}
     </h2>
+    <div style="color: red">
+        {% for tag in tags %}
+        <span>{{ tag }}</span>
+        {% endfor %}
+    </div>
     <article>
-        <img src="{% static 'blog/images/'|add:view_post.image%}" alt="{{ post.title }}" />
-        <address>By {{ view_post.author|title }}</address>
+        <img src="{% static 'blog/images/'|add:view_post.image_name%}" alt="{{ post.title }}" />
+        <address>By <a style="color: white; text-decoration:none" href="mailto:{{view_post.author.email}}"> {{ view_post.author|title }}</a></address>
         <div>
             Last updated on <time> {{ view_post.date|date:"d M Y" }} </time>
         </div>

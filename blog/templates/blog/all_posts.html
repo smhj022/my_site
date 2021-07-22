@@ -11,10 +11,10 @@ My blog
 {% endblock %}
 
 {% block content %}
-<section id="all_posts">
+<section style="margin-top:25px" id="all_posts">
     <h2>My Collected Posts</h2>
 
-    <ul>
+    <ul >
         {% for post in all_posts %}
             {% include "blog/include/post.html"%}
         {% endfor %}
