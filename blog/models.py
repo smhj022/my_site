@@ -24,12 +24,10 @@ class Tag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     excerpt = models.CharField(max_length=200)
-
-    # ImageField is required to install Pillow use command python3 -m pip install Pillow
-    # some setting is done before using Image field we need to tell django where to store uploaded file
-    # uploaded_to= "posts" files are uploaded to posts folder inside the Upload folder that is configure in setting.py
+    ## ImageField is required to install Pillow use command python3 -m pip install Pillow
+    ## some setting is done before using Image field we need to tell django where to store uploaded file
+    ## uploaded_to= "posts" files are uploaded to posts folder inside the Upload folder that is configure in setting.py
     image = models.ImageField(upload_to="posts", null=True)
-
     date = models.DateField(auto_now=True)
     slug = models.SlugField(unique=True, db_index=True)
     content = models.TextField(validators=[MinLengthValidator(50)])
