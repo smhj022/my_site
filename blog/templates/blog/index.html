@@ -24,7 +24,8 @@ My blog
     <h2>My Latest Post</h2>
     <ul>
         {% for post in posts%}
-        <!-- post in available in include no need to mention due to hierarchy -->
+        <!-- post is available in include no need to mention due to hierarchy -->
+        <!-- This is a way of “including” other templates within a template. -->
             {% include "blog/include/post.html" %}  
         {% endfor %}
     </ul>

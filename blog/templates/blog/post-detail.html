@@ -21,7 +21,7 @@ The post Title
         {% endfor %}
     </div>
     <article>
-        <img src="{% static 'blog/images/'|add:view_post.image_name%}" alt="{{ post.title }}" />
+        <img src="{{ view_post.image.url }}" alt="{{ view_post.title }}" />
         <address>By <a style="color: white; text-decoration:none" href="mailto:{{view_post.author.email}}"> {{ view_post.author|title }}</a></address>
         <div>
             Last updated on <time> {{ view_post.date|date:"d M Y" }} </time>
