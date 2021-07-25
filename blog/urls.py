@@ -5,5 +5,5 @@ from . import views
 urlpatterns = [
     path("", views.StartingPageView.as_view(), name="starting-page"),
     path("posts", views.PostsView.as_view(), name="post-page"),
-    path("posts/<slug:slug>", views.post_detail, name="post-detail-page")  # / e.g. /post/my-first-post
+    path("posts/<slug:slug>", views.PostDetails.as_view(), name="post-detail-page")  # / e.g. /post/my-first-post
 ]

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import Author, Post, Tag
+from .form import CommentForm
 
 # Register your models here.
 
@@ -16,3 +17,5 @@ admin.site.register(Author)
 admin.site.register(Post, PostAdmin)
 
 admin.site.register(Tag)
+
+

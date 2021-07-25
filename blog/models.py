@@ -20,7 +20,6 @@ class Tag(models.Model):
     def __str__(self) -> str:
         return f"{self.caption}"
 
-
 class Post(models.Model):
     title = models.CharField(max_length=100)
     excerpt = models.CharField(max_length=200)
@@ -38,3 +37,11 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+    
+class Comments(models.Model):
+    user_name = models.CharField(max_length=30)
+    user_email = models.EmailField()
+    text = models.TextField(max_length=400)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+
