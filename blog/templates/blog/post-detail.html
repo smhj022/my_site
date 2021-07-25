@@ -11,6 +11,16 @@ The post Title
 {% endblock %}
 
 {% block content %}
+
+
+{% if comment_form.errors %}
+    <div id="alert">
+    <h2>Saving the comment is Failed!</h2>
+    <p>Please check the errors blow and try again!</p>
+    <a href="#comment-form">Fix!</a>
+    </div>
+{% endif %}
+
 <section id="summary">
     <h2>
         {{ view_post.title }}
@@ -29,18 +39,32 @@ The post Title
     </article>
 </section>
 
+
 <main>
     <p>
         {{ view_post.content|linebreaks }}
     </p>
 </main>
 
+<section id="comments">
+    <ul>
+        <h2>Comment Section</h2>
+        {% for comment in comments %}
+        <li>
+            <h2>{{ comment.user_name}}</h2>
+            <h4>{{ comment.text }}</h4>
+        </li>
+        {% endfor %}
+    </ul>
+
+</section>
+
 <section style="text-align: center;"  id="comment-form">
     <h2>Your Comment</h2>
     <form action="{% url 'post-detail-page' view_post.slug %}", method="POST">
         {% csrf_token %}
         {% for form_field in comment_from %}
-        <div class="form-control">
+        <div class="form-control {% if form_field.errors %} invalid {% endif%}">
             {{ form_field.label_tag }}
             {{ form_field }}
             {{ form_field.errors }}

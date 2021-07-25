@@ -75,10 +75,12 @@ class PostDetails(View):
     def get(self, request, slug):
         show_post = get_object_or_404(Post, slug=slug)
         form = CommentForm()
+        comment_on_post = Comments.objects.filter(post_id=show_post.id)
         return render(request, "blog/post-detail.html", {
             "view_post": show_post,
             "tags": show_post.tags.all(),
             "comment_from": form,
+            "comments": comment_on_post.order_by("-id")
         })
 
     def post(self, request, slug):
@@ -95,6 +97,7 @@ class PostDetails(View):
             "view_post": show_post,
             "tags": show_post.tags.all(),
             "comment_from": comment_form,
+            "comments": show_post.comments.all().order_by("-id")
         })
 
 # class PostDetailsView(DetailView):
