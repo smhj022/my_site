@@ -85,9 +85,10 @@ class PostDetails(View):
         show_post = get_object_or_404(Post, slug=slug)
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
-            ### important : As post is not part of form we need to add post in form as given
+            # important : As post is not part of form we need to add post in form as given
             comment = comment_form.save(commit=False)
             comment.post = show_post
+            comment.save()
             return HttpResponseRedirect(reverse("post-detail-page", args=[show_post.slug]))
 
         return render(request, "blog/post-detail.html", {
