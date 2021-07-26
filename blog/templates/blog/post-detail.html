@@ -25,11 +25,29 @@ The post Title
     <h2>
         {{ view_post.title }}
     </h2>
-    <div style="color: red">
+    <div>
         {% for tag in tags %}
-        <span>{{ tag }}</span>
+        <span class="tag">{{ tag }}</span>
         {% endfor %}
     </div>
+
+
+    <form action="{% url 'read-later'%}" method="POST">
+        {% csrf_token %}
+    <input type="hidden", value="{{ view_post.id }}" name="post_id">
+
+    <div id="read-later">
+        <button>
+            {% if not saved_for_later %}
+                Read Later
+            {% else %}
+                Remove from Read Later
+            {% endif %}
+        </button>
+    </div> 
+    </form>
+
+
     <article>
         <img src="{{ view_post.image.url }}" alt="{{ view_post.title }}" />
         <address>By <a style="color: white; text-decoration:none" href="mailto:{{view_post.author.email}}"> {{ view_post.author|title }}</a></address>

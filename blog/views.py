@@ -1,12 +1,12 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post
-from django.views import View
-from django.urls import reverse
-from django.views.generic.base import TemplateView
-from django.views.generic import ListView, DetailView
-from .form import CommentForm
 from django.http import HttpResponseRedirect
-from .models import Comments
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+from django.views import View
+from django.views.generic import DetailView, ListView
+from django.views.generic.base import TemplateView
+
+from .form import CommentForm
+from .models import Comments, Post
 
 ############## methods for statting page ##############
 
@@ -71,16 +71,25 @@ class PostsView(ListView):
 
 
 class PostDetails(View):
+    def is_stored(self, request, post_id):
+        stored_post = request.session.get("stored_post")
+        if stored_post is not None:
+            is_saved_for_later = post_id in stored_post
+        else:
+            is_saved_for_later = False
+        return is_saved_for_later
 
     def get(self, request, slug):
         show_post = get_object_or_404(Post, slug=slug)
         form = CommentForm()
         comment_on_post = Comments.objects.filter(post_id=show_post.id)
+
         return render(request, "blog/post-detail.html", {
             "view_post": show_post,
             "tags": show_post.tags.all(),
             "comment_from": form,
-            "comments": comment_on_post.order_by("-id")
+            "comments": comment_on_post.order_by("-id"),
+            "saved_for_later": self.is_stored(request, show_post.id)
         })
 
     def post(self, request, slug):
@@ -97,7 +106,8 @@ class PostDetails(View):
             "view_post": show_post,
             "tags": show_post.tags.all(),
             "comment_from": comment_form,
-            "comments": show_post.comments.all().order_by("-id")
+            "comments": show_post.comments.all().order_by("-id"),
+            "saved_for_later": self.is_stored(request, show_post.id)
         })
 
 # class PostDetailsView(DetailView):
@@ -108,3 +118,40 @@ class PostDetails(View):
 #         context = super().get_context_data(**kwargs)
 #         context["tags"] = self.objects.tags.all()
 #         return context
+
+
+class ReadLaterView(View):
+    def get(self, request):
+        stored_post = request.session.get("stored_post")
+        
+        context = {}
+
+        if stored_post is None:
+            context["posts"] = []
+            context["has_post"] = False
+        else:
+            post = Post.objects.filter(id__in=stored_post)
+            context["posts"] = post
+            context["has_post"] = True
+        return render(request, "blog/stored-post.html", context)
+
+    def post(self, request):
+        # get data from session
+        stored_post = request.session.get("stored_post")
+
+        # If on stored post before we create a stored_post list
+        if stored_post is None:
+            stored_post = []
+
+        # getting post id from the request.POST 
+        post_id = int(request.POST["post_id"])
+
+        # if post_id already in stored_post then then leave it otherwise add post id to the session
+        if post_id not in stored_post:
+            stored_post.append(post_id)
+        else:
+            stored_post.remove(post_id)
+            
+        ## saving data to the session
+        request.session["stored_post"] = stored_post
+        return HttpResponseRedirect("/")
